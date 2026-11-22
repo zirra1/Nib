@@ -22,7 +22,7 @@
 - **Shape:** 1 px borders instead of shadows; radii 6 px (controls) and 10 px (rare). Lists and grids are drawn with shared hairlines, not floating cards.
 - **Spacing:** 4 px grid.
 - **Icons:** custom 20 px set, 1.5 px strokes. Every tool has a tooltip with its shortcut.
-- **Cursor as brand:** the site's own cursor is the Nib arrow; over anything clickable its hotspot lights up orange. Once you press *Use it here*, your cursor takes over the whole site.
+- **Cursor as brand:** the site's own cursor is the Nib arrow; over anything clickable its hotspot lights up orange. Once you wear your cursor on Nib (Apply screen), it takes over the whole site.
 - **Motion:** short (150–260 ms), no bounce, honours reduced motion.
 - **Detail:** a tick-mark "ruler" under section headers; checkerboards mean transparency everywhere.
 
