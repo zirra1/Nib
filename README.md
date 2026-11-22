@@ -12,6 +12,8 @@ npm run dev          # http://localhost:3000
 npm test             # unit tests (pixel engine, history, templates, storage, upload checks)
 npm run build && npx next start -p 3100
 node e2e/flow.cjs http://localhost:3100   # end-to-end flow, desktop + phone emulation
+node e2e/apply.cjs http://localhost:3100  # downloads, OS detection, the Chrome extension for real
+node scripts/build-extension.cjs          # rebuild public/nib-chrome-extension.zip after changing extension/
 ```
 
 ## Where things are
@@ -25,5 +27,8 @@ node e2e/flow.cjs http://localhost:3100   # end-to-end flow, desktop + phone emu
 | `src/lib/storage.ts` | "My cursors" in localStorage, validated on read. |
 | `src/lib/importImage.ts` | Upload: validate, decode locally, remove a plain background, crop, fit. |
 | `src/components/editor/` | The editor: canvas, tools, colour, hotspot, live preview. |
+| `src/lib/export/` | File formats written from scratch: .cur, .ani, Mousecape .cape, install.inf, SVG, ZIP. |
+| `src/components/apply/` | The Apply screen and its illustrated install guides. |
+| `extension/` | The Chrome extension (Manifest V3). Add the live site's address to `config.js` before publishing. |
 | `docs/DESIGN.md` | Identity, design system, user flow. |
 | `docs/MILESTONES.md` | What each milestone delivered and what's next. |

@@ -29,9 +29,9 @@
 ## User flow (3 steps)
 1. **Create** (`/new`): template gallery, upload, or blank grid; pick a size (32 is standard).
 2. **Customise** (`/editor`): tools, colour, hotspot, size; a live preview where your real mouse wears the cursor over text, links, buttons and five backgrounds.
-3. **Apply**: *Use it here* applies it on Nib and saves it (Milestone 1). Downloads for Mac/Windows, PNG/SVG and the Chrome extension come in Milestone 2.
+3. **Apply** (`/apply`): one screen, one decision. Use in my browser (extension), Download for Mac, Download for Windows, or PNG/SVG. The option for your computer is preselected and marked.
 
-Fastest path measured by the e2e test: **landing → Classic template → Use it here = 3 clicks.**
+Fastest path measured by the e2e test, with the extension installed: **landing → Start creating → Classic → Apply → Use in my browser = 4 clicks.**
 
 ## Keyboard
 | Key | Action | Key | Action |

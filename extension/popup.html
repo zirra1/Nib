@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nib</title>
+<style>
+  :root { --paper: #f3f1ec; --ink: #151515; --ink-2: #57544e; --line: #e1ddd4; --accent: #ff4f1a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 300px; font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); }
+  header { display: flex; align-items: center; gap: 6px; padding: 12px 14px; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 15px; letter-spacing: -0.03em; }
+  main { padding: 14px; }
+  .card { display: flex; gap: 12px; align-items: center; padding: 12px; background: #fff; border: 1px solid var(--line); border-radius: 6px; }
+  .thumb { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 4px;
+    background: #fff repeating-conic-gradient(#eeebe5 0 25%, #fff 0 50%) 0 0 / 12px 12px; }
+  .name { font-weight: 600; }
+  .muted { color: var(--ink-2); font-size: 12px; }
+  .row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+  button, a.btn { font: inherit; border-radius: 6px; padding: 7px 12px; border: 1px solid #cdc8bd; background: #fff; color: var(--ink); cursor: pointer; text-decoration: none; }
+  button.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .switch { position: relative; width: 36px; height: 20px; appearance: none; background: #cdc8bd; border-radius: 99px; cursor: pointer; margin: 0; }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 99px; background: #fff; transition: transform 0.15s; }
+  .switch:checked { background: var(--ink); }
+  .switch:checked::after { transform: translateX(16px); }
+  footer { padding: 0 14px 14px; color: var(--ink-2); font-size: 11.5px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5 L5 20 L9.1 16.2 L12 22.4 L14.8 21.1 L12 15 L17.5 15 Z" fill="#151515"/><rect x="3" y="2.5" width="4" height="4" fill="#ff4f1a"/></svg>
+  nib
+</header>
+<main>
+  <section id="has">
+    <div class="card">
+      <span class="thumb"><img id="img" alt=""></span>
+      <div><div class="name" id="name"></div><div class="muted" id="hs"></div></div>
+    </div>
+    <label class="row"><span>Use it on websites</span><input type="checkbox" class="switch" id="enabled"></label>
+    <div class="row"><button id="remove">Remove</button><a class="btn" id="open" target="_blank" rel="noopener">Make another</a></div>
+  </section>
+  <section id="none" hidden>
+    <p style="margin-top:0">No cursor yet. Make one in Nib, then press <b>Use in my browser</b>.</p>
+    <a class="btn" id="open2" target="_blank" rel="noopener">Open Nib</a>
+  </section>
+</main>
+<footer>Chrome doesn't allow extensions on its own pages (Settings, the Web Store, the new-tab page), so your cursor won't show there.</footer>
+<script src="config.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

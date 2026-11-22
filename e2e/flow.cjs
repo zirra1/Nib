@@ -28,18 +28,24 @@ async function dragOnCanvas(p, pts) {
   const errs = [];
   p.on('pageerror', (e) => errs.push(e.message));
 
-  // ---- 1. Fastest path: landing → template → wear it. Count the clicks.
+  // ---- 1. Path to a cursor without the extension: landing → template → Apply → wear it on Nib.
   const t0 = Date.now();
   let clicks = 0;
   await p.goto(BASE + '/');
   await p.getByRole('link', { name: 'Start creating' }).first().click(); clicks++;
   await p.getByRole('link', { name: 'Classic', exact: true }).click(); clicks++;
-  await p.getByRole('button', { name: /Use it here/ }).click(); clicks++;
+  await p.getByRole('button', { name: /^Apply/ }).click(); clicks++;
+  await p.waitForURL(/\/apply\?id=/);
+  await p.getByRole('heading', { name: 'Where will you use it?' }).waitFor({ timeout: 5000 }).catch(() => {});
+  ok((await p.getByRole('heading', { name: 'Where will you use it?' }).count()) === 1, `Apply screen reached in ${clicks} clicks (${((Date.now() - t0) / 1000).toFixed(1)} s automated)`);
+  await p.getByRole('button', { name: /wear it on Nib/ }).click();
   const applied = await p.evaluate(() => ({ attr: document.documentElement.hasAttribute('data-user-cursor'), css: getComputedStyle(document.documentElement).getPropertyValue('--user-cursor') }));
-  ok(applied.attr && applied.css.includes('data:image/png'), `cursor applied to the site in ${clicks} clicks (${((Date.now() - t0) / 1000).toFixed(1)} s automated)`);
-  ok(/Saved/.test(await p.getByTestId('save-status').innerText()), 'wearing it also saves it');
+  ok(applied.attr && applied.css.includes('data:image/png'), 'cursor can be worn on Nib from the Apply screen');
   const bodyCursor = await p.evaluate(() => getComputedStyle(document.querySelector('header')).cursor);
   ok(bodyCursor.includes('data:image/png'), 'applied cursor is used across the page');
+  await p.getByRole('link', { name: '← Back to editing' }).click();
+  await p.locator('[data-testid=canvas]').waitFor();
+  ok(/Saved/.test(await p.getByTestId('save-status').innerText()), 'Apply saved the design first');
   await shot(p, 'editor-template');
 
   // ---- 2. Draw, undo, redo, hotspot.
@@ -79,7 +85,9 @@ async function dragOnCanvas(p, pts) {
   await shot(p, 'editor-edited');
 
   // ---- 3. Saved designs persist and list.
-  await p.getByRole('button', { name: /Use it here/ }).click(); // wear the edited version
+  await p.getByRole('button', { name: /^Apply/ }).click();
+  await p.getByRole('button', { name: /wear it on Nib/ }).click(); // wear the edited version
+  await p.goBack();
   await p.reload();
   await p.locator('[data-testid=canvas]').waitFor();
   ok((await p.getByLabel('Hotspot x').inputValue()) === '16', 'saved design reopens with its hotspot');
@@ -121,8 +129,7 @@ async function dragOnCanvas(p, pts) {
   await p.goto(BASE + '/editor?blank=1&size=48');
   await p.locator('[data-testid=canvas]').waitFor();
   ok((await p.getByLabel('Cursor size').inputValue()) === '48', 'blank grid opens at the chosen size');
-  p.once('dialog', (d) => d.accept());
-  await p.getByRole('button', { name: /Use it here/ }).click();
+  await p.getByRole('button', { name: /^Apply/ }).click();
   ok((await p.getByText(/Draw something first/).count()) === 1, 'an empty cursor cannot be applied');
   await p.goto(BASE + '/editor?id=doesnotexist');
   ok((await p.getByRole('heading', { name: 'We couldn’t find that cursor' }).count()) === 1, 'unknown design shows a helpful error');
@@ -149,7 +156,7 @@ async function dragOnCanvas(p, pts) {
     await mp.touchscreen.tap(cb.x + cb.width * 0.1, cb.y + cb.height * 0.9);
     ok((await canvasHash(mp)) !== h0, `${name}: drawing works by touch`);
     ok(await mp.getByRole('toolbar', { name: 'Tools' }).isVisible(), `${name}: tools along the bottom`);
-    ok(!(await mp.getByRole('button', { name: /Use it here/ }).isVisible()), `${name}: no "use it here" on a touch screen`);
+
     if (name === 'iPhone 13') await shot(mp, 'm-editor');
     await mp.getByRole('button', { name: 'Preview', exact: true }).tap();
     ok(await mp.getByRole('dialog').getByText(/Cursors are used with a mouse or trackpad/).isVisible(), `${name}: preview explains cursors are applied on a computer`);

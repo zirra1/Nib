@@ -1,13 +1,13 @@
 'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { SIZES, bitmapToPng, pngToBitmap, resizeBitmap, type CursorSize } from '@/lib/cursor';
 import { selectDirty, useEditor, type Doc, type Tool } from '@/lib/editorStore';
 import { createBitmap, isEmpty, tipPixel } from '@/lib/pixels';
-import { getApplied, getDesign, newId, saveDesign, StorageFullError } from '@/lib/storage';
+import { getDesign, newId, saveDesign, StorageFullError } from '@/lib/storage';
 import { rasterTemplate, templateById, templateHotspot } from '@/lib/templates';
-import { applyCursor } from '../AppliedCursor';
-import { IconCheck, IconCursor, IconFit, IconMinus, IconPlus, IconRedo, IconSliders, IconUndo } from '../Icons';
+import { IconArrowRight, IconCheck, IconFit, IconMinus, IconPlus, IconRedo, IconSliders, IconUndo } from '../Icons';
 import { Mark } from '../Logo';
 import { toast } from '../Toast';
 import { Button, ButtonLink, IconButton } from '../ui';
@@ -55,6 +55,7 @@ async function loadFromUrl(): Promise<void> {
 }
 
 export function Editor() {
+  const router = useRouter();
   const status = useEditor((s) => s.status);
   const error = useEditor((s) => s.error);
   const doc = useEditor((s) => s.history.present);
@@ -104,15 +105,11 @@ export function Editor() {
     return d;
   }
 
-  function wear() {
+  function goApply() {
     const d = useEditor.getState().history.present;
     if (isEmpty(d.bmp)) { toast('Draw something first. An empty cursor would be invisible.'); return; }
-    const before = getApplied();
-    applyCursor({ png: bitmapToPng(d.bmp), hotspot: d.hotspot });
-    const saved = save();
-    toast(saved ? 'You’re wearing it, and it’s saved. Move your mouse.' : 'You’re wearing it. Move your mouse.', {
-      tone: 'ok', action: { label: 'Undo', run: () => applyCursor(before) },
-    });
+    if (!save()) return;
+    router.push(`/apply?id=${useEditor.getState().id}`);
   }
 
   function resize(n: CursorSize) {
@@ -198,8 +195,8 @@ export function Editor() {
             </select>
           </label>
           <Button size="sm" onClick={() => save() && toast('Saved to My cursors.', { tone: 'ok' })} disabled={status !== 'ready'}>Save</Button>
-          <Button size="sm" variant="primary" onClick={wear} disabled={status !== 'ready'} className="max-lg:hidden">
-            <IconCursor size={16} /> Use it here
+          <Button size="sm" variant="primary" onClick={goApply} disabled={status !== 'ready'}>
+            Apply <IconArrowRight size={16} />
           </Button>
         </div>
       </header>

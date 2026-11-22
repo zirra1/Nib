@@ -13,7 +13,7 @@ const OLD_WAY = [
 const STEPS = [
   { n: '01', title: 'Create', body: 'Start from a template, upload an image, or draw on a blank pixel grid. Plain backgrounds are removed and the image is cropped to cursor size for you.' },
   { n: '02', title: 'Customise', body: 'Pen, shapes, fill, colours and sizes from 32 to 128 px. Then place the hotspot, the exact pixel that clicks, and test it with your own mouse.' },
-  { n: '03', title: 'Apply', body: 'One click puts it on right here. Downloads for Mac and Windows, PNG and SVG, and a Chrome extension are next.' },
+  { n: '03', title: 'Apply', body: 'One click with the Nib extension for Chrome, or a ready-to-install download for Mac or Windows. PNG and SVG for designers and websites.' },
 ];
 
 export default function Home() {
@@ -91,7 +91,7 @@ export default function Home() {
             {[
               'No account needed. Your designs are saved in this browser, on this device.',
               'Uploaded images are processed on your device. They are never sent to us.',
-              'The Chrome extension, when it ships, will only be able to change your cursor. It won’t read the pages you visit.',
+              'The Chrome extension only sets your cursor. It doesn’t read the pages you visit, and it never sends anything anywhere.',
             ].map((t) => (
               <li key={t} className="flex gap-4 border-b border-line py-4 leading-relaxed text-ink-2">
                 <IconCheck className="mt-0.5 shrink-0 text-ink" />
